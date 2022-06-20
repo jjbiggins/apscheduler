@@ -144,8 +144,10 @@ class CalendarIntervalTrigger(Trigger):
             if value > 0:
                 fields.append(f"{field}={value}")
 
-        fields.append(f"time={self._time.isoformat()!r}")
-        fields.append(f"start_date='{self.start_date}'")
+        fields.extend(
+            (f"time={self._time.isoformat()!r}", f"start_date='{self.start_date}'")
+        )
+
         if self.end_date:
             fields.append(f"end_date='{self.end_date}'")
 

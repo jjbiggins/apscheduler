@@ -340,10 +340,10 @@ class SQLAlchemyDataStore(_BaseSQLAlchemyDataStore, DataStore):
         for attempt in self._retry():
             with attempt, self.engine.begin() as conn:
                 result = conn.execute(query)
-                tasks = [
-                    Task.unmarshal(self.serializer, row._asdict()) for row in result
+                return [
+                    Task.unmarshal(self.serializer, row._asdict())
+                    for row in result
                 ]
-                return tasks
 
     def add_schedule(self, schedule: Schedule, conflict_policy: ConflictPolicy) -> None:
         event: Event
@@ -554,7 +554,7 @@ class SQLAlchemyDataStore(_BaseSQLAlchemyDataStore, DataStore):
     def get_jobs(self, ids: Iterable[UUID] | None = None) -> list[Job]:
         query = self.t_jobs.select().order_by(self.t_jobs.c.id)
         if ids:
-            job_ids = [job_id for job_id in ids]
+            job_ids = list(ids)
             query = query.where(self.t_jobs.c.id.in_(job_ids))
 
         for attempt in self._retry():

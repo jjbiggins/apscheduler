@@ -110,8 +110,9 @@ class Worker:
         exception: BaseException | None = None
         try:
             while self._state is RunState.started:
-                available_slots = self.max_concurrent_jobs - len(self._running_jobs)
-                if available_slots:
+                if available_slots := self.max_concurrent_jobs - len(
+                    self._running_jobs
+                ):
                     jobs = self.data_store.acquire_jobs(self.identity, available_slots)
                     for job in jobs:
                         task = self.data_store.get_task(job.task_id)

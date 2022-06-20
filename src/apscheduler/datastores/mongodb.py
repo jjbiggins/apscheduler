@@ -378,10 +378,7 @@ class MongoDBDataStore(DataStore):
                     sort=[("next_run_time", ASCENDING)],
                 )
 
-        if document:
-            return document["next_run_time"]
-        else:
-            return None
+        return document["next_run_time"] if document else None
 
     def add_job(self, job: Job) -> None:
         document = job.marshal(self.serializer)

@@ -17,10 +17,7 @@ from .marshalling import callable_from_ref, callable_to_ref
 
 
 def serialize(inst, field, value):
-    if isinstance(value, frozenset):
-        return list(value)
-
-    return value
+    return list(value) if isinstance(value, frozenset) else value
 
 
 @attrs.define(kw_only=True)

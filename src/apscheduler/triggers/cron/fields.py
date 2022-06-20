@@ -87,8 +87,7 @@ class BaseField:
 
     def append_expression(self, expr: str) -> None:
         for compiler in self.compilers:
-            match = compiler.value_re.match(expr)
-            if match:
+            if match := compiler.value_re.match(expr):
                 compiled_expr = compiler(**match.groupdict())
 
                 try:

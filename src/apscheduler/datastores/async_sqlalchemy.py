@@ -203,10 +203,10 @@ class AsyncSQLAlchemyDataStore(_BaseSQLAlchemyDataStore, AsyncDataStore):
             with attempt:
                 async with self.engine.begin() as conn:
                     result = await conn.execute(query)
-                    tasks = [
-                        Task.unmarshal(self.serializer, row._asdict()) for row in result
+                    return [
+                        Task.unmarshal(self.serializer, row._asdict())
+                        for row in result
                     ]
-                    return tasks
 
     async def add_schedule(
         self, schedule: Schedule, conflict_policy: ConflictPolicy
@@ -431,7 +431,7 @@ class AsyncSQLAlchemyDataStore(_BaseSQLAlchemyDataStore, AsyncDataStore):
     async def get_jobs(self, ids: Iterable[UUID] | None = None) -> list[Job]:
         query = self.t_jobs.select().order_by(self.t_jobs.c.id)
         if ids:
-            job_ids = [job_id for job_id in ids]
+            job_ids = list(ids)
             query = query.where(self.t_jobs.c.id.in_(job_ids))
 
         async for attempt in self._retry():

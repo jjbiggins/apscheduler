@@ -22,11 +22,10 @@ class DateTrigger(Trigger):
     _completed: bool = attrs.field(init=False, eq=False, default=False)
 
     def next(self) -> datetime | None:
-        if not self._completed:
-            self._completed = True
-            return self.run_time
-        else:
+        if self._completed:
             return None
+        self._completed = True
+        return self.run_time
 
     def __getstate__(self) -> dict[str, Any]:
         return {

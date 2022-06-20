@@ -61,7 +61,7 @@ class DistributedEventBrokerMixin:
 
     def generate_notification_str(self, event: Event) -> str:
         serialized = self.serializer.serialize(attrs.asdict(event))
-        return event.__class__.__name__ + " " + b64encode(serialized).decode("ascii")
+        return f"{event.__class__.__name__} " + b64encode(serialized).decode("ascii")
 
     def _reconstitute_event(self, event_type: str, serialized: bytes) -> Event | None:
         try:

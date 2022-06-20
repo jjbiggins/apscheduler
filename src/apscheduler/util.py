@@ -28,10 +28,7 @@ undefined = (
 
 
 def timezone_repr(timezone: tzinfo) -> str:
-    if isinstance(timezone, ZoneInfo):
-        return timezone.key
-    else:
-        return repr(timezone)
+    return timezone.key if isinstance(timezone, ZoneInfo) else repr(timezone)
 
 
 def absolute_datetime_diff(dateval1: datetime, dateval2: datetime) -> float:
