@@ -19,10 +19,7 @@ else:
 
 def as_int(value) -> int | None:
     """Convert the value into an integer."""
-    if value is None:
-        return None
-
-    return int(value)
+    return None if value is None else int(value)
 
 
 def as_timezone(value: str | tzinfo | None) -> tzinfo:
@@ -40,11 +37,7 @@ def as_timezone(value: str | tzinfo | None) -> tzinfo:
     elif isinstance(value, str):
         return ZoneInfo(value)
     elif isinstance(value, tzinfo):
-        if value is timezone.utc:
-            return ZoneInfo("UTC")
-        else:
-            return value
-
+        return ZoneInfo("UTC") if value is timezone.utc else value
     raise TypeError(
         f"Expected tzinfo instance or timezone name, got "
         f"{value.__class__.__qualname__} instead"
@@ -72,17 +65,11 @@ def as_date(value: date | str | None) -> date | None:
 
 
 def as_timestamp(value: datetime | None) -> float | None:
-    if value is None:
-        return None
-
-    return value.timestamp()
+    return None if value is None else value.timestamp()
 
 
 def as_ordinal_date(value: date | None) -> int | None:
-    if value is None:
-        return None
-
-    return value.toordinal()
+    return None if value is None else value.toordinal()
 
 
 def as_aware_datetime(value: datetime | str | None) -> datetime | None:
@@ -99,16 +86,12 @@ def as_aware_datetime(value: datetime | str | None) -> datetime | None:
 
     if isinstance(value, str):
         if value.upper().endswith("Z"):
-            value = value[:-1] + "+00:00"
+            value = f"{value[:-1]}+00:00"
 
         value = datetime.fromisoformat(value)
 
     if isinstance(value, datetime):
-        if not value.tzinfo:
-            return value.replace(tzinfo=get_localzone())
-        else:
-            return value
-
+        return value if value.tzinfo else value.replace(tzinfo=get_localzone())
     raise TypeError(
         f"Expected string or datetime, got {value.__class__.__qualname__} instead"
     )

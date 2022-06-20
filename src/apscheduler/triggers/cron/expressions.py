@@ -214,10 +214,7 @@ class WeekdayPositionExpression(AllExpression):
         else:
             target_day = first_hit_day + ((last_day - first_hit_day) // 7) * 7
 
-        if last_day >= target_day >= dateval.day:
-            return target_day
-        else:
-            return None
+        return target_day if last_day >= target_day >= dateval.day else None
 
     def __str__(self):
         return f"{self.options[self.option_num]} {WEEKDAYS[self.weekday]}"

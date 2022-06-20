@@ -11,14 +11,14 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 
 def tick():
-    print("Tick! The time is: %s" % datetime.now())
+    print(f"Tick! The time is: {datetime.now()}")
 
 
 if __name__ == "__main__":
     scheduler = BlockingScheduler()
     scheduler.add_executor("processpool")
     scheduler.add_job(tick, "interval", seconds=3)
-    print("Press Ctrl+{} to exit".format("Break" if os.name == "nt" else "C"))
+    print(f'Press Ctrl+{"Break" if os.name == "nt" else "C"} to exit')
 
     try:
         scheduler.initialize()

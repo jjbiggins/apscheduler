@@ -186,8 +186,7 @@ class MemoryDataStore(DataStore):
 
     def remove_schedules(self, ids: Iterable[str]) -> None:
         for schedule_id in ids:
-            state = self._schedules_by_id.pop(schedule_id, None)
-            if state:
+            if state := self._schedules_by_id.pop(schedule_id, None):
                 self._schedules.remove(state)
                 event = ScheduleRemoved(schedule_id=state.schedule.id)
                 self._events.publish(event)
@@ -264,10 +263,9 @@ class MemoryDataStore(DataStore):
     def acquire_jobs(self, worker_id: str, limit: int | None = None) -> list[Job]:
         now = datetime.now(timezone.utc)
         jobs: list[Job] = []
-        for _index, job_state in enumerate(self._jobs):
+        for job_state in self._jobs:
             task_state = self._tasks[job_state.job.task_id]
 
-            # Skip already acquired jobs (unless the acquisition lock has expired)
             if job_state.acquired_by is not None:
                 if job_state.acquired_until >= now:
                     continue
